@@ -707,9 +707,14 @@ CGRect IASKCGRectSwap(CGRect rect);
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
         if ([MFMailComposeViewController canSendMail]) {
             MFMailComposeViewController *mailViewController = [[MFMailComposeViewController alloc] init];
-            mailViewController.navigationBar.barStyle = self.navigationController.navigationBar.barStyle;
-            mailViewController.navigationBar.tintColor = self.navigationController.navigationBar.tintColor;
-            mailViewController.navigationBar.titleTextAttributes =  self.navigationController.navigationBar.titleTextAttributes;
+            
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
+            if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
+                mailViewController.navigationBar.barStyle = self.navigationController.navigationBar.barStyle;
+                mailViewController.navigationBar.tintColor = self.navigationController.navigationBar.tintColor;
+                mailViewController.navigationBar.titleTextAttributes =  self.navigationController.navigationBar.titleTextAttributes;
+            }
+#endif
             
             if ([specifier localizedObjectForKey:kIASKMailComposeSubject]) {
                 [mailViewController setSubject:[specifier localizedObjectForKey:kIASKMailComposeSubject]];
